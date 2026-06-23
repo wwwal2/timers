@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(duration);
 
 export default function Timer() {
   const [seconds, setSeconds] = useState(0);
@@ -19,17 +23,10 @@ export default function Timer() {
     };
   }, [running]);
 
-  const formatTime = (total: number) => {
-    const h = Math.floor(total / 3600).toString().padStart(2, '0');
-    const m = Math.floor((total % 3600) / 60).toString().padStart(2, '0');
-    const s = (total % 60).toString().padStart(2, '0');
-    return `${h}:${m}:${s}`;
-  };
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, p: 4 }}>
       <Typography variant="h2" sx={{ fontFamily: 'monospace' }}>
-        {formatTime(seconds)}
+        {dayjs.duration(seconds, 'seconds').format('HH:mm:ss')}
       </Typography>
       <Box sx={{ display: 'flex', gap: 1 }}>
         <Button variant="contained" onClick={() => setRunning(r => !r)}>
