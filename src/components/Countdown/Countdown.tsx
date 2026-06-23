@@ -1,7 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import { useTimer } from '../../hooks/useTimer';
+import {
+  containerSx,
+  displaySx,
+  timeInputRowSx,
+  separatorSx,
+  fieldSx,
+  buttonRowSx,
+} from './styles';
 
 dayjs.extend(duration);
 
@@ -15,37 +24,16 @@ interface TimeInput {
 
 const DEFAULT_INPUT: TimeInput = { hours: 0, minutes: 1, seconds: 0 };
 
-const toSeconds = ({ hours, minutes, seconds }: TimeInput) =>
-  hours * 3600 + minutes * 60 + seconds;
-
 const clamp = (val: number, min: number, max: number) =>
   Math.min(max, Math.max(min, val));
 
 export default function Countdown() {
   const [mode, setMode] = useState<Mode>('display');
   const [timeInput, setTimeInput] = useState<TimeInput>(DEFAULT_INPUT);
-  const [seconds, setSeconds] = useState(toSeconds(DEFAULT_INPUT));
-  const [running, setRunning] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  useEffect(() => {
-    if (running) {
-      intervalRef.current = setInterval(() => {
-        setSeconds(prev => {
-          if (prev <= 1) {
-            setRunning(false);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } else {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    }
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [running]);
+  const { seconds, running, setRunning, setSeconds } = useTimer({
+    direction: 'down',
+    initialSeconds: dayjs.duration(DEFAULT_INPUT).asSeconds(),
+  });
 
   const handleFieldChange =
     (field: keyof TimeInput, max: number) =>
@@ -57,7 +45,7 @@ export default function Countdown() {
 
   const handleModeToggle = () => {
     if (mode === 'set') {
-      const total = toSeconds(timeInput);
+      const total = dayjs.duration(timeInput).asSeconds();
       setSeconds(total);
       setRunning(false);
     }
@@ -66,17 +54,17 @@ export default function Countdown() {
 
   const handleReset = () => {
     setRunning(false);
-    setSeconds(toSeconds(timeInput));
+    setSeconds(dayjs.duration(timeInput).asSeconds());
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, p: 4 }}>
+    <Box sx={containerSx}>
       {mode === 'display' ? (
-        <Typography variant="h2" id="display" sx={{ fontFamily: 'monospace' }}>
+        <Typography variant="h2" id="display" sx={displaySx}>
           {dayjs.duration(seconds, 'seconds').format('HH:mm:ss')}
         </Typography>
       ) : (
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <Box sx={timeInputRowSx}>
           <TextField
             label="HH"
             type="number"
@@ -84,9 +72,9 @@ export default function Countdown() {
             value={timeInput.hours}
             onChange={handleFieldChange('hours', 99)}
             slotProps={{ htmlInput: { min: 0, max: 99 } }}
-            sx={{ width: 72 }}
+            sx={fieldSx}
           />
-          <Typography variant="h4" sx={{ fontFamily: 'monospace' }}>:</Typography>
+          <Typography variant="h4" sx={separatorSx}>:</Typography>
           <TextField
             label="MM"
             type="number"
@@ -94,9 +82,9 @@ export default function Countdown() {
             value={timeInput.minutes}
             onChange={handleFieldChange('minutes', 59)}
             slotProps={{ htmlInput: { min: 0, max: 59 } }}
-            sx={{ width: 72 }}
+            sx={fieldSx}
           />
-          <Typography variant="h4" sx={{ fontFamily: 'monospace' }}>:</Typography>
+          <Typography variant="h4" sx={separatorSx}>:</Typography>
           <TextField
             label="SS"
             type="number"
@@ -104,12 +92,12 @@ export default function Countdown() {
             value={timeInput.seconds}
             onChange={handleFieldChange('seconds', 59)}
             slotProps={{ htmlInput: { min: 0, max: 59 } }}
-            sx={{ width: 72 }}
+            sx={fieldSx}
           />
         </Box>
       )}
 
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={buttonRowSx}>
         <Button variant="contained" onClick={() => setRunning(r => !r)} disabled={seconds === 0 || mode === 'set'}>
           {running ? 'Pause' : 'Start'}
         </Button>
