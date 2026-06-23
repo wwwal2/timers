@@ -30,22 +30,20 @@ export default function LabelFrame({ children, defaultLabel = 'CLOCK' }: LabelFr
   return (
     <Box
       sx={{
-        position: 'relative',
         border: '2px solid',
         borderColor: 'divider',
         borderRadius: 2,
         pt: 2.5,
         px: 2,
         pb: 2,
-        display: 'inline-flex',
+        display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: 'max-content',
       }}
     >
       <Box
         sx={{
-          position: 'absolute',
-          top: 0,
           px: 0.75,
           bgcolor: 'background.default',
           lineHeight: 1,
