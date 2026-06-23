@@ -59,17 +59,18 @@ export default function LabelFrame({ children, defaultLabel = 'CLOCK' }: LabelFr
           onKeyDown={handleKeyDown}
           onClick={handleLabelClick}
           readOnly={!editing}
-          inputProps={{ size: Math.max(label.length, 1) }}
+          inputProps={{ size: Math.max(label.length + 4, 1) }}
           sx={{
             fontSize: '0.75rem',
             fontWeight: 700,
             letterSpacing: '0.08em',
             color: 'text.secondary',
             cursor: editing ? 'text' : 'pointer',
+            overflow: "visible",
             '& input': {
               p: 0,
               cursor: 'inherit',
-              // textTransform: 'uppercase',
+              textTransform: 'uppercase',
             },
           }}
         />
