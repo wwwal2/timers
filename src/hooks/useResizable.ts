@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
-type ResizeDir = 'right' | 'bottom' | 'corner';
 
 interface Size {
   width: number;
@@ -11,7 +10,7 @@ interface UseResizableResult {
   containerRef: React.RefObject<HTMLDivElement | null>;
   size: Size | null;
   scaleFactor: number;
-  startResize: (e: React.MouseEvent, dir: ResizeDir) => void;
+  startResize: (e: React.MouseEvent) => void;
 }
 
 const MIN_W = 160;
@@ -33,7 +32,7 @@ export function useResizable(): UseResizableResult {
   const scaleFactor = size && naturalSize ? size.width / naturalSize.width : 1;
 
   const startResize = useCallback(
-    (e: React.MouseEvent, dir: ResizeDir) => {
+    (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
 
@@ -46,16 +45,7 @@ export function useResizable(): UseResizableResult {
         const dx = ev.clientX - startX;
         const dy = ev.clientY - startY;
 
-        if (dir === 'right') {
-          // Proportional: keep aspect ratio so content never clips
-          const newW = Math.max(MIN_W, startW + dx);
-          const ratio = startH / startW;
-          setSize({ width: newW, height: Math.max(MIN_H, Math.round(newW * ratio)) });
-        } else if (dir === 'bottom') {
-          setSize({ width: startW, height: Math.max(MIN_H, startH + dy) });
-        } else {
-          setSize({ width: Math.max(MIN_W, startW + dx), height: Math.max(MIN_H, startH + dy) });
-        }
+        setSize({ width: Math.max(MIN_W, startW + dx), height: Math.max(MIN_H, startH + dy) });
       };
 
       const onUp = () => {

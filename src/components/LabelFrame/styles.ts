@@ -48,26 +48,6 @@ export const contentAreaSx = (scaleFactor: number): SxProps<Theme> => ({
   zoom: scaleFactor,
 });
 
-export const rightHandleSx: SxProps<Theme> = {
-  position: 'absolute',
-  right: 0,
-  top: 0,
-  width: HANDLE_PX,
-  height: '100%',
-  cursor: 'ew-resize',
-  zIndex: 10,
-};
-
-export const bottomHandleSx: SxProps<Theme> = {
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  width: '100%',
-  height: HANDLE_PX,
-  cursor: 's-resize',
-  zIndex: 10,
-};
-
 export const cornerHandleSx: SxProps<Theme> = {
   position: 'absolute',
   bottom: 0,

@@ -7,8 +7,6 @@ import {
   labelBoxSx,
   inputBaseSx,
   contentAreaSx,
-  rightHandleSx,
-  bottomHandleSx,
   cornerHandleSx,
 } from './styles';
 
@@ -62,14 +60,7 @@ export default function LabelFrame({ children, defaultLabel = 'CLOCK' }: LabelFr
         {children}
       </Box>
 
-      {/* Right edge handle */}
-      <Box onMouseDown={e => startResize(e, 'right')} sx={rightHandleSx} />
-
-      {/* Bottom edge handle */}
-      <Box onMouseDown={e => startResize(e, 'bottom')} sx={bottomHandleSx} />
-
-      {/* Corner handle (takes priority over edge handles at the intersection) */}
-      <DragIndicatorIcon onMouseDown={e => startResize(e, 'corner')} sx={cornerHandleSx} />
+      <DragIndicatorIcon onMouseDown={e => startResize(e,)} sx={cornerHandleSx} />
     </Box>
   );
 }
