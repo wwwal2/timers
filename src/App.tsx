@@ -1,19 +1,18 @@
 import { Countdown } from './components/Countdown'
 import { Timer } from './components/Timer'
 import { LabelFrame } from './components/LabelFrame'
-import { Box } from '@mui/material'
+import { ScreenManager } from './components/ScreenManager'
 
 function App() {
-
   return (
-    <Box sx={{ display: 'flex', gap: 2, p: 4 }}>
-      <LabelFrame >
+    <ScreenManager>
+      <LabelFrame>
         <Timer />
       </LabelFrame>
       <LabelFrame defaultLabel="Countdown">
         <Countdown />
       </LabelFrame>
-    </Box>
+    </ScreenManager>
   )
 }
 
