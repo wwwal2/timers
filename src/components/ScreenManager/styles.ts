@@ -4,6 +4,7 @@ export const containerSx: SxProps<Theme> = {
   display: 'flex',
   gap: 2,
   p: 4,
+  flexWrap: 'wrap',
 };
 
 export const itemSx = (isDragging: boolean, isTarget: boolean): SxProps<Theme> => ({

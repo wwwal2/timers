@@ -16,13 +16,12 @@ import { secondsToTimeInput, clamp } from '../../helpers/countdown'
 
 dayjs.extend(duration);
 
-const DEFAULT_INPUT: TimeInput = { hours: 0, minutes: 0, seconds: 0 };
-
-
 
 export default function Countdown({ initialSeconds }: { initialSeconds: number }) {
   const [mode, setMode] = useState<Mode>('display');
-  const [timeInput, setTimeInput] = useState<TimeInput>(DEFAULT_INPUT);
+
+  const [timeInput, setTimeInput] = useState<TimeInput>(secondsToTimeInput(initialSeconds));
+
   const { seconds, running, setRunning, setSeconds } = useTimer({
     direction: 'down',
     initialSeconds,
@@ -37,13 +36,15 @@ export default function Countdown({ initialSeconds }: { initialSeconds: number }
     };
 
   const handleModeToggle = () => {
-    setTimeInput(secondsToTimeInput(seconds));
 
     if (mode === 'set') {
       const total = dayjs.duration(timeInput).asSeconds();
       setSeconds(total);
       setRunning(false);
+    } else {
+      setTimeInput(secondsToTimeInput(seconds));
     }
+
     setMode(m => (m === 'display' ? 'set' : 'display'));
   };
 
