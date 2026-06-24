@@ -1,0 +1,14 @@
+[
+	{
+		"type": "timer",
+		"value": 700,
+		"order": 1,
+		"name": "My Clock"
+	},
+	{
+		"type": "countdown",
+		"value": 1000,
+		"order": 2,
+		"name": "My Countdown"
+	}
+]

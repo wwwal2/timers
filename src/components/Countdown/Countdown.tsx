@@ -11,28 +11,21 @@ import {
   fieldSx,
   buttonRowSx,
 } from './styles';
+import type { Mode, TimeInput } from '../../types/timers';
+import { secondsToTimeInput, clamp } from '../../helpers/countdown'
 
 dayjs.extend(duration);
 
-type Mode = 'display' | 'set';
+const DEFAULT_INPUT: TimeInput = { hours: 0, minutes: 0, seconds: 0 };
 
-interface TimeInput {
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
 
-const DEFAULT_INPUT: TimeInput = { hours: 0, minutes: 1, seconds: 0 };
 
-const clamp = (val: number, min: number, max: number) =>
-  Math.min(max, Math.max(min, val));
-
-export default function Countdown() {
+export default function Countdown({ initialSeconds }: { initialSeconds: number }) {
   const [mode, setMode] = useState<Mode>('display');
   const [timeInput, setTimeInput] = useState<TimeInput>(DEFAULT_INPUT);
   const { seconds, running, setRunning, setSeconds } = useTimer({
     direction: 'down',
-    initialSeconds: dayjs.duration(DEFAULT_INPUT).asSeconds(),
+    initialSeconds,
   });
 
   const handleFieldChange =
@@ -44,6 +37,8 @@ export default function Countdown() {
     };
 
   const handleModeToggle = () => {
+    setTimeInput(secondsToTimeInput(seconds));
+
     if (mode === 'set') {
       const total = dayjs.duration(timeInput).asSeconds();
       setSeconds(total);

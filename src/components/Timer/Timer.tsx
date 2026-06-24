@@ -6,8 +6,8 @@ import { containerSx, displaySx, buttonRowSx } from './styles';
 
 dayjs.extend(duration);
 
-export default function Timer() {
-  const { seconds, running, setRunning, setSeconds } = useTimer();
+export default function Timer({ initialSeconds }: { initialSeconds: number }) {
+  const { seconds, running, setRunning, setSeconds } = useTimer({ initialSeconds });
 
   return (
     <Box sx={containerSx}>
