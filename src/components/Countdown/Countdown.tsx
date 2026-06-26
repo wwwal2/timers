@@ -1,18 +1,13 @@
 import { useState } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { useTimer } from '../../hooks/useTimer';
-import {
-  containerSx,
-  displaySx,
-  timeInputRowSx,
-  separatorSx,
-  fieldSx,
-  buttonRowSx,
-} from './styles';
+import { containerSx, buttonRowSx } from './styles';
 import type { Mode, TimeInput } from '../../types/timers';
-import { secondsToTimeInput, clamp } from '../../helpers/countdown'
+import { secondsToTimeInput, clamp } from '../../helpers/countdown';
+import CountdownDisplay from './CountdownDisplay';
+import CountdownSetMode from './CountdownSetMode';
 
 dayjs.extend(duration);
 
@@ -54,43 +49,11 @@ export default function Countdown({ initialSeconds }: { initialSeconds: number }
   };
 
   return (
-    <Box sx={containerSx}>
+    <Box sx={containerSx(mode)}>
       {mode === 'display' ? (
-        <Typography variant="h2" id="display" sx={displaySx}>
-          {dayjs.duration(seconds, 'seconds').format('HH:mm:ss')}
-        </Typography>
+        <CountdownDisplay seconds={seconds} />
       ) : (
-        <Box sx={timeInputRowSx}>
-          <TextField
-            label="HH"
-            type="number"
-            size="small"
-            value={timeInput.hours}
-            onChange={handleFieldChange('hours', 99)}
-            slotProps={{ htmlInput: { min: 0, max: 99 } }}
-            sx={fieldSx}
-          />
-          <Typography variant="h4" sx={separatorSx}>:</Typography>
-          <TextField
-            label="MM"
-            type="number"
-            size="small"
-            value={timeInput.minutes}
-            onChange={handleFieldChange('minutes', 59)}
-            slotProps={{ htmlInput: { min: 0, max: 59 } }}
-            sx={fieldSx}
-          />
-          <Typography variant="h4" sx={separatorSx}>:</Typography>
-          <TextField
-            label="SS"
-            type="number"
-            size="small"
-            value={timeInput.seconds}
-            onChange={handleFieldChange('seconds', 59)}
-            slotProps={{ htmlInput: { min: 0, max: 59 } }}
-            sx={fieldSx}
-          />
-        </Box>
+        <CountdownSetMode timeInput={timeInput} onFieldChange={handleFieldChange} />
       )}
 
       <Box sx={buttonRowSx}>

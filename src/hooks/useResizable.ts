@@ -29,7 +29,7 @@ export function useResizable(): UseResizableResult {
     }
   }, []);
 
-  const scaleFactor = size && naturalSize ? size.width / naturalSize.width : 1;
+  const scaleFactor = size && naturalSize ? size.height / naturalSize.height : 1;
 
   const startResize = useCallback(
     (e: React.MouseEvent) => {

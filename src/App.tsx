@@ -3,6 +3,8 @@ import { Timer } from './components/Timer'
 import { LabelFrame } from './components/LabelFrame'
 import { ScreenManager } from './components/ScreenManager'
 import data from './timersData.json'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 function App() {
   const timers = data.map((timer, index) => {
@@ -14,9 +16,11 @@ function App() {
   });
 
   return (
-    <ScreenManager>
-      {timers}
-    </ScreenManager>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en">
+      <ScreenManager>
+        {timers}
+      </ScreenManager>
+    </LocalizationProvider>
   )
 }
 

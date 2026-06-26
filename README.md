@@ -1,6 +1,4 @@
 # React + TypeScript + Vite
 
 Add TIMEZONE CLOCK
-
-BUGS:
-label cuts
+ADD till date choose
