@@ -5,7 +5,7 @@ export interface Timer {
 	name: string;
 }
 
-export type Mode = 'display' | 'set';
+export type CountdownMode = 'display' | 'set';
 
 export interface TimeInput {
 	hours: number;

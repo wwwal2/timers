@@ -1,12 +1,11 @@
 import type { SxProps, Theme } from '@mui/material';
-import type { Mode } from '../../types/timers';
+import type { CountdownMode } from '../../types/timers';
 
-export const containerSx: (mode: Mode) => SxProps<Theme> = (mode) => ({
+export const containerSx: (mode: CountdownMode) => SxProps<Theme> = (mode) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   gap: 2,
-  // py: mode === 'display' ? 4 : 2.95,
   pt: mode === 'display' ? 4 : 2.95,
   pb: mode === 'display' ? 3 : 2.95,
   px: mode === 'display' ? 4 : 2.35,

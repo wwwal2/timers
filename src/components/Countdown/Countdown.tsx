@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { useTimer } from '../../hooks/useTimer';
 import { containerSx, buttonRowSx } from './styles';
-import type { Mode, TimeInput } from '../../types/timers';
+import type { CountdownMode, TimeInput } from '../../types/timers';
 import { secondsToTimeInput, clamp } from '../../helpers/countdown';
 import CountdownDisplay from './CountdownDisplay';
 import CountdownSetMode from './CountdownSetMode';
@@ -13,7 +13,8 @@ dayjs.extend(duration);
 
 
 export default function Countdown({ initialSeconds }: { initialSeconds: number }) {
-  const [mode, setMode] = useState<Mode>('display');
+  const [countdownMode, setCountdownMode] = useState<CountdownMode>('display');
+  const [timeSetMode, setTimeSetMode] = useState<'amount' | 'tillDate'>('amount');
 
   const [timeInput, setTimeInput] = useState<TimeInput>(secondsToTimeInput(initialSeconds));
 
@@ -24,23 +25,23 @@ export default function Countdown({ initialSeconds }: { initialSeconds: number }
 
   const handleFieldChange =
     (field: keyof TimeInput, max: number) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const val = clamp(parseInt(e.target.value) || 0, 0, max);
-      const updated = { ...timeInput, [field]: val };
-      setTimeInput(updated);
-    };
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = clamp(parseInt(e.target.value) || 0, 0, max);
+        const updated = { ...timeInput, [field]: val };
+        setTimeInput(updated);
+      };
 
   const handleModeToggle = () => {
 
-    if (mode === 'set') {
+    if (countdownMode === 'set') {
       const total = dayjs.duration(timeInput).asSeconds();
       setSeconds(total);
       setRunning(false);
     } else {
-      setTimeInput(secondsToTimeInput(seconds));
+      // setTimeInput(secondsToTimeInput(seconds));
     }
 
-    setMode(m => (m === 'display' ? 'set' : 'display'));
+    setCountdownMode(m => (m === 'display' ? 'set' : 'display'));
   };
 
   const handleReset = () => {
@@ -49,22 +50,27 @@ export default function Countdown({ initialSeconds }: { initialSeconds: number }
   };
 
   return (
-    <Box sx={containerSx(mode)}>
-      {mode === 'display' ? (
+    <Box sx={containerSx(countdownMode)}>
+      {countdownMode === 'display' ? (
         <CountdownDisplay seconds={seconds} />
       ) : (
-        <CountdownSetMode timeInput={timeInput} onFieldChange={handleFieldChange} />
+        <CountdownSetMode 
+        timeInput={timeInput} 
+        onFieldChange={handleFieldChange} 
+        setTimeInput={setTimeInput} 
+        timeSetMode={timeSetMode} 
+        setTimeSetMode={setTimeSetMode} />
       )}
 
       <Box sx={buttonRowSx}>
-        <Button variant="contained" onClick={() => setRunning(r => !r)} disabled={seconds === 0 || mode === 'set'}>
+        <Button variant="contained" onClick={() => setRunning(r => !r)} disabled={seconds === 0 || countdownMode === 'set'}>
           {running ? 'Pause' : 'Start'}
         </Button>
-        <Button variant="outlined" onClick={handleReset} disabled={mode === 'set'}>
+        <Button variant="outlined" onClick={handleReset} disabled={countdownMode === 'set'}>
           Reset
         </Button>
         <Button variant="outlined" onClick={handleModeToggle}>
-          {mode === 'display' ? 'Set' : 'Done'}
+          {countdownMode === 'display' ? 'Set' : 'Done'}
         </Button>
       </Box>
     </Box>
